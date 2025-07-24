@@ -1,0 +1,261 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage{graphicx, amsmath, hyperref, pdfpages, float, helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\graphicspath{{images/}}
+\title{\textbf{QUACKEMS 3-Input Test Board}}
+\author{Emma Stensland}
+\date{June 19, 2025}
+\begin{document}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{quackems_logo.png} 
+    \label{fig:quackems}
+\end{figure}
+\vspace{-12pt}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\section{General Description}
+\subsection{Introduction}
+\hspace{\parindent}The 3-Input Test board analyzes the output of the W1 Silicon Strip 
+Detector for \textbf{QUACKEMS}\footnote{Quantitative Charge Kinetic Energy Mass Sensor}. 
+The W1 Detector has 16 channels correlating to each silicon strip, 
+and 3 of the channels may be tested at a time.\newline 
+
+\textit{\textbf{As of June 
+19, 2025, the 3 inputs on the board are soldered to channels 7, 8, and 9.}} 
+
+\newpage
+\subsection{Theory of Operation}
+\hspace{\parindent}\textbf{W1 Detector:} The W1 silicon strip detector has p-type 
+strips and n-type bulk, with metallization on the top strips and bottom surface. 
+This means that the detector behaves like a diode, and when the detector is reverse 
+biased a depletion zone is made. When a charged particle crosses the depletion zone, 
+it ionizes atoms along its track. In the depletion zone, there is no free sharge to accept
+the free electrons and holes. Therefore, they drift to the electrodes on opposing surfaces.
+The free holes get collected by the strip side of the detector, and generate a charge pulse. 
+\newline
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.70\textwidth]{detector_diagram_1.png} 
+    \caption{Basic Diagram of Silicon Strip Detector}
+    \label{fig:ssd}
+\end{figure}
+
+\hspace{\parindent}\textbf{Board:} The purpose of the board is to take the input charge 
+pulse of the W1 detector and convert it to a voltage pulse signal. 
+This is done with a preamplifier and pulse shaper stage.
+The charge sensitive preamplifier stage integrates the charge pulse and produces a 
+voltage pulse that decays exponentially. The gaussian pulse shaper stage takes the 
+tail pulse from the preamplifier and produces a bell curve as the output.
+All 16 channels of the detector are AC-coupled. A low-pass filter maintains a steady 
+bias voltage, the bias supplies current to the DC detector, and a capacitor between 
+the preamplifier input and detector output blocks any DC current.
+The test inputs simulate a charge pulse when a square wave is inputted.
+The board itself is encased in a grounded metal enclosure that functions as a Faraday cage.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{detector_connections.jpg} 
+    \caption{Basic Diagram of Front End System}
+    \label{fig:connections}
+\end{figure}
+
+\newpage
+\subsection{Specifications}
+The following specifications are required for proper usage of the board:
+\begin{itemize}
+    \item Amplifier Supply Voltage:  6\,V--13\,V
+    \item Bias Supply: Dependent on W1 Detector, needs to be negative for detector
+    to enter depletion.
+    \item Grounding: Ensure the metal enclosure is properly grounded 
+    during operation to maintain signal integrity and reduce noise.
+\end{itemize}
+
+\newpage
+\subsection{Board Overview}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{board_overview.jpg} 
+    \caption{Top view of PCB}
+    \label{fig:pcbimage}
+\end{figure}
+Each numbered box correlates to the following part of the board:
+\begin{enumerate}
+    \item W1 Detector Pin Header
+    \item Input Test Signal SMA Connectors
+    \item W1 Detector Input Signal Jumper Connections
+    \item Screw Terminal for Power
+    \item Output Signals SMA Connectors
+    \item Preamplified Test Point SMA Connectors
+\end{enumerate}
+
+\newpage
+\section{Connections}
+\subsection{W1 Detector}
+\hspace{\parindent}This gets attached at the pin header 1 seen in Figure \ref{fig:pcbimage}. The strip side 
+of the detector is oriented up with the top of the board, while the ohmic side faces down.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.70\textwidth]{detector_to_board_connection.jpg} 
+    \caption{Detector connected to board}
+    \label{fig:detectorconnect}
+\end{figure}
+\subsection{Input Test Signals}
+\hspace{\parindent}The SMA connectors supply test signals on the exterior of the enclosure as seen in Figure 
+\ref{fig:enclosure1}.
+\subsection{Output Signals}
+\hspace{\parindent}The SMA connectors read out the output signals on the exterior of the enclosure as seen in 
+Figure \ref{fig:enclosure1}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{box_side_1.jpg} 
+    \caption{Input and Output Side View of enclosure}
+    \label{fig:enclosure1}
+\end{figure}
+
+\subsection{Detector Input Signals}
+\hspace{\parindent}These signals are soldered onto the detectors channels as described below:
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Test Input} & \textbf{Detector Channel} \\
+\hline
+Input 1 & Channel 7 \\
+Input 2 & Channel 8 \\
+Input 3 & Channel 9 \\
+\hline
+\end{tabular}
+\caption{Test Input to Detector Channel Mapping}
+\end{table}
+
+\subsection{Amp Power}
+\hspace{\parindent}To power the amplifiers, a positive power supply in the range of +6\,V to +13\,V should be 
+connected to the +6\,V terminal, and a negative supply from -6\,V to -13\,V to the -6\,V 
+terminal. For testing, 9\,V batteries are to be connected as pictured in 
+Figure \ref{fig:pcbimage2}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{board_batteries.jpg} 
+    \caption{Batteries Connected to Board}
+    \label{fig:pcbimage2}
+\end{figure}
+
+\subsection{Preamplified Test Points}
+\hspace{\parindent}The SMA connectors read test points after the signal has been preamplified at the location
+pictured in Figure \ref{fig:enclosure2}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.60\textwidth]{box_side_2.jpg} 
+    \caption{Test Point Side View of enclosure}
+    \label{fig:enclosure2}
+\end{figure}
+
+\subsection{Bias and Ground}
+\hspace{\parindent}The SMA connector on the top of the enclosure has a red and black wire. The black wire connects 
+to ground and the red wire connects to bias, as shown in Figure \ref{fig:enclosure3}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.70\textwidth]{box_side_3.jpg} 
+    \caption{Bias Top View of enclosure}
+    \label{fig:enclosure3}
+\end{figure}
+
+\newpage
+\section{Testing Procedure}
+In order to verify successful operation of the board, the following procedure should be 
+used for channels 1-3.
+\begin{enumerate}
+    \item Connect the batteries to the board, as pictured in Figure \ref{fig:pcbimage2}.
+    \item Connect an SMA connector from the output of a function generator to the input of the 
+    channel desired to be tested. The input channels are the bottom row of SMA connections on
+    the side of the enclosure, as pictured in Figure \ref{fig:enclosure1}.
+    \item Set the function generator to 1\,kHz, with 0\,V offset, and 500\,mV$_{pp}$, 
+    and turn the function generator on. This generates a impulse-like excitation after 
+    AC coupling, suitable for shaping circuit analysis.
+    \item Connect an SMA connector from an oscilloscope to the test point of the channel being
+    tested. The test point connections can be found on the side of the enclosure, as seen in 
+    Figure \ref{fig:enclosure2}. Adjust the scaling of the oscilloscope as necessary, and the following waveform
+    should appear:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.70\textwidth]{test_pulse.jpg} 
+        \caption{Preamplified Input as Seen on Oscilloscope}
+        \label{fig:image1}
+    \end{figure}
+    \item Connect an SMA connector from an oscilloscope to the output of the channel being
+    tested. The test point connections can be found on the side of the enclosure, as seen in
+    Figure \ref{fig:enclosure1}. At the same scaling as before the output will appear like 
+    Figure \ref{fig:image2}, and when zoomed in, the oscilloscope should display Figure \ref{fig:image3}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.70\textwidth]{output_scope.jpg} 
+        \caption{Output as Seen on Zoomed out Image of Oscilloscope}
+        \label{fig:image2}
+    \end{figure}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.70\textwidth]{output_zoomed.jpg} 
+        \caption{Output as Seen on Zoomed in Image of Oscilloscope}
+        \label{fig:image3}
+    \end{figure} 
+    \item If all waveforms look as expected, the tested channel is working properly. 
+    If this test failed, verify all SMA connectors and wires are properly connected, 
+    and power is being properly supplied to the board.
+\end{enumerate}
+
+\newpage
+\section{Design Overview}
+\subsection{PCB Layout}
+The PCB is a four layer board with each layer serving a purpose as listed:
+\begin{enumerate}
+    \item Ground Plane, Bias Signals, Surface Mount Signals (Fig. \ref{fig:boardlayer1})
+    \item Electrically Shielded I/O Signals of Preamp (Fig. \ref{fig:boardlayer2})
+    \item Ground Plane (Fig. \ref{fig:boardlayer3})
+    \item Power Lines for Preamp and Shaper (Fig. \ref{fig:boardlayer4})
+\end{enumerate}
+\newpage
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{board_layer1.png} 
+    \caption{Layer 1 of 3-Input Test Board}
+    \label{fig:boardlayer1}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{board_layer2.png} 
+    \caption{Layer 2 of 3-Input Test Board}
+    \label{fig:boardlayer2}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{board_layer3.png} 
+    \caption{Layer 3 of 3-Input Test Board}
+    \label{fig:boardlayer3}
+\end{figure}
+\vspace{-1em}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{board_layer4.png} 
+    \caption{Layer 4 of 3-Input Test Board}
+    \label{fig:boardlayer4}
+\end{figure}
+
+\clearpage
+\newpage
+\section{References}
+The following resources were used:
+\begin{itemize}
+    \item \hyperlink{https://www.cremat.com/}{Cremat Inc Website (cremat.com)}
+    \item \hyperlink{https://indico.cern.ch/event/124392/contributions/1339904/attachments/74582/106976/IntroSilicon.pdf}{CERN Silicon Strip Detector Slide Show}
+    \item CR-110-R2.2 Datasheet
+    \item CR-200-R2.1 Datasheet
+    \item W1 300um Documentation
+\end{itemize}
+
+\includepdf[pages={1}]{pdf/CR-110-R2.2.pdf}
+\includepdf[pages={1}]{pdf/CR-200-R2.1.pdf}
+\includepdf[pages={1,2}]{pdf/W1 Data sheet.pdf}
+\newpage
+\end{document}
